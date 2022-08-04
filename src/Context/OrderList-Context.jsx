@@ -14,8 +14,8 @@ const OrderContextProvider = ({ children }) => {
             case "SUMMERY_OF_ORDERS":
                 return {...state,ordersSummary:payload};
 
-            // case "LAST_7_DAYS_ORDERS":
-            //     return {...state,ordersLast7Days:payload}
+            case "LAST_7_DAYS_ORDERS":
+                return {...state,ordersLast7Days:payload}
             
             default:
                 return state;
@@ -24,7 +24,9 @@ const OrderContextProvider = ({ children }) => {
 
     const [data, dispatchData] = useReducer(updateHandler,{
         ordersList:[],
-        ordersSummary:[]
+        ordersSummary:[],
+        ordersLast7Days:{}
+
     })
 
 
@@ -54,9 +56,21 @@ const  OrdersSummary = async (dispatch) => {
     }
 };
 
+const  OrdersLast7Days = async (dispatch) => {
+    try{
+        const { data } = await axios.get("http://13.76.214.165:8001/api/analytics/last7Days",
+        {
+            headers : {Authorization:"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOlsiYzQ5MGRmYTgtZWJmMy00NTE5LWI1M2EtZDc1Y2I3NGJlMDUwIiwiVXJ2aXNoIiwiU2hhaCIsInVydmlzaC5zaGFoQHB1c2hwYWsuYWkiXSwiaWF0IjoxNjQ5NzUyODc0LCJleHAiOjE2ODEyODg4NzR9.13UfXk_CVjKSqyC5pq2HgQK6KKI_PPM886C0dZB5CtM"}
+        })
+        dispatchData({type:'LAST_7_DAYS_ORDERS',payload:data.data})
+    }catch(err){
+        console.log(err)
+    }
+};
+
 
     return(
-        <orderContext.Provider value={{data, dispatchData ,OrdersList,OrdersSummary}}>
+        <orderContext.Provider value={{data, dispatchData ,OrdersList,OrdersSummary, OrdersLast7Days}}>
             { children }
         </orderContext.Provider>
     )

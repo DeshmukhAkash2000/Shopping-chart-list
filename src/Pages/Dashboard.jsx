@@ -2,15 +2,18 @@ import React, { useEffect } from "react";
 import { OrdersList } from "../Context/OrderList-Context";
 import { LatestOrder } from "./Latest-Order";
 import { useOrder } from "../Context/OrderList-Context";
+import { Chart } from "./Chart";
 
 const Dashboard = () => {
   const {
-    data: { ordersSummary },
+    data: { ordersSummary, ordersLast7Days },
     OrdersSummary,
+    OrdersLast7Days
   } = useOrder();
 
   useEffect(() => {
     OrdersSummary();
+    OrdersLast7Days()
   }, []);
 
   let colorsOfData = [
@@ -59,10 +62,10 @@ const Dashboard = () => {
         </div>
         <div className="d-flex">
           <div
-            className="card text-bg-warning bg-opacity-10 m-2 rounded-4"
+            className="card text-bg-warning bg-opacity-25 m-2 rounded-4 bg-aqua p-2 text-dark opacity-25"
             style={{ width: "12rem", height: "12rem" }}
           >
-            <div className="card-body text-start" style={{ width: "8rem" }}>
+            <div className="card-body text-start " style={{ width: "8rem" }}>
               <h4 className="card-text">New orders</h4>
             </div>
             <p className="text-start text-muted ms-3">
@@ -151,6 +154,21 @@ const Dashboard = () => {
                 );
               })}
           </div>
+        </div>
+      <div className="mt-5" style={{ width: "95%" }}>
+            <div className="d-flex justify-content-between align-items-center mb-4">
+                <div className="d-flex justify-content-between ms-1" style={{ width: "10rem" }}>
+                    <h5>Revenue</h5>
+                    <h5>Orders</h5>
+                </div>
+                <select class="form-select me-2" aria-label="Default select example" style={{ width: "8.5rem" }}>
+                    <option selected>Last 7 Days</option>
+                    <option value="1">Last Month</option>
+                    <option value="2">Last Year</option>
+                    <option value="3">Last 3 Year</option>
+                </select>
+            </div>
+            <Chart data={ordersLast7Days} />
         </div>
       </div>
       <div

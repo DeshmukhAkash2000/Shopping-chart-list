@@ -2,7 +2,8 @@ import './App.css';
 import { Routes, Route} from "react-router-dom";
 import { SignIn } from './Pages/SignIn';
 import {ForgotPassword} from "./Pages/Forgot-Password"
-import {Dashboard} from "./Pages/Dashboard"
+import {Dashboard} from "./Pages/Dashboard";
+import {Chart} from "./Pages/Chart"
 
 function App() {
   return (

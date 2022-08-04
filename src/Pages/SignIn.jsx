@@ -1,11 +1,12 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import {UseLoginContext} from "../Context/LogIn";
+import {useLoginContext} from "../Context/LogIn";
 import {clickHandler} from "../Services/Login-Services";
 
 const SignIn = () => {
   const [details, setDetails] = useState({ username: "", password: "" });
-  const {state: {isLogin, error},dispatch} = UseLoginContext();
+  const {state: {isLogin, error},dispatch} = useLoginContext();
+  const [showPassword, setShowPassword] = useState(false);
   const navigate = useNavigate()
 
   
@@ -15,7 +16,11 @@ const SignIn = () => {
   };
 
   const Submit = () =>{
-    clickHandler(details)
+    clickHandler(dispatch, details)
+  }
+
+  if(isLogin){
+    navigate("/dashboard")
   }
 
   return (
@@ -30,8 +35,7 @@ const SignIn = () => {
       />
       <div
         className="border border-grey p-5"
-        style={{ width: "40rem", borderRadius: "10px" }}
-      >
+        style={{ width: "40rem", borderRadius: "10px" }}>
         <h1 style={{ textDecoration: "underline" }}>Sign In</h1>
         <h5 style={{ textAlign: "start" }}>Email</h5>
         <div className="input-group flex-nowrap">
@@ -46,10 +50,10 @@ const SignIn = () => {
             onChange={(e) => inputHandler(e.target)}
           />
         </div>
-        <h5 style={{ textAlign: "start" }}>Password</h5>
-        <div className="input-group flex-nowrap">
+        <h5 className="mt-3" style={{ textAlign: "start" }}>Password</h5>
+        <div className="input-group flex-nowrap ">
           <input
-            type="password"
+              type={showPassword ? "text" : "password"}
             name="password"
             class="form-control"
             placeholder="Enter Password"
@@ -57,8 +61,14 @@ const SignIn = () => {
             aria-describedby="addon-wrapping"
             onChange={(e) => inputHandler(e.target)}
           />
+            <span
+                className="input-group-text rounded-4 rounded-start border-start-0"
+                id="basic-addon2"
+                onClick={() => setShowPassword(!showPassword)}
+            >Show</span>
         </div>
-        <div class="d-grid gap-2">
+       {error && <p className="text-danger">Oops! Your Username or Password is wrong.</p>}
+        <div class="d-grid gap-2 mt-3">
           <button
             class="btn btn-primary"
             type="button"
@@ -69,9 +79,8 @@ const SignIn = () => {
           </button>
         </div>
         <Link to="/forgotpass">Forgot Password?</Link>
-        <div className="d-flex justify-content-center">
-          <p>Don't have an account</p>
-          <Link to="/dashboard"> Sign Up?</Link>
+        <div className="d-flex justify-content-center mt-3">
+          <p>Don't have an account <span className="text-primary">Signup</span></p>
         </div>
       </div>
     </div>
